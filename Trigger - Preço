@@ -1,0 +1,32 @@
+# insert preco
+delimiter $
+
+create trigger trg_preco_insert
+after insert on preco
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual)
+    values(new.id_preco,'preco','INSERT',concat('preço de venda ',new.pre_venda));
+    end$
+    
+    
+# delete preco
+
+create trigger trg_preco_delete
+before delete on preco
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual)
+    values(old.id_preco,'preco','DELETE',concat('preço de venda ',old.pre_venda));
+    end$
+    
+    
+# update preco
+
+create trigger trg_preco_update
+after update on preco
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual, valor_novo)
+    values(old.id_preco,'preco','UPDATE',cocnat('preco venda ',old.pre_venda), concat('preco venda ',new.pre_venda));
+    end$

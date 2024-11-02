@@ -31,3 +31,13 @@ CREATE TABLE PRECO (
     dt_final DATE,    -- Data de término da promoção (se houver)
     FOREIGN KEY (id_prod) REFERENCES Produto(id_prod)
 );
+
+CREATE TABLE log (
+    id_log INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_item INT NOT NULL,
+    nome_tabela VARCHAR(50) NOT NULL,
+    operacao VARCHAR(20) NOT NULL,
+    valor_atual VARCHAR(500),
+    valor_novo VARCHAR(500),
+    CONSTRAINT chk_operacao CHECK (operacao IN ('INSERT', 'UPDATE', 'DELETE'))
+);

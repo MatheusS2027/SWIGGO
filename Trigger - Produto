@@ -1,0 +1,42 @@
+use swiggo;
+
+create table log(
+	id_log int not null auto_increment primary key,
+    id_item int not null,
+	nome_tabela varchar(50) not null,
+    operacao varchar(20) not null ,
+    valor_atual varchar(500),
+    valor_novo varchar(500),
+    Constraint chk_operacao check(operacao in ('INSERT','UPDATE','DELETE'))
+);
+
+#insert produto
+delimiter $
+create trigger trg_prod_insert
+after insert on produto
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual)
+    values(new.id_prod,'produto','INSERT',new.nome);
+    end$
+
+# delete produto
+
+create trigger trg_prod_delete
+before delete on produto
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual)
+    values(old.id_prod,'produto','DELETE',old.nome);
+    end$
+    
+    
+# update produto
+
+create trigger trg_prod_update
+after update on produto
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual, valor_novo)
+    values(old.id_prod,'produto','UPDATE',old.nome, new.nome);
+    end$

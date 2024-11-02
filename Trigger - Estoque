@@ -1,0 +1,32 @@
+# insert estoque
+delimiter $
+
+   create trigger trg_etoque_insert
+after insert on estoque
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual)
+    values(new.id_produto,'estoque','INSERT',new.qtde);
+    end$
+    
+    
+# delete estoque
+
+create trigger trg_estoque_delete
+before delete on estoque
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual)
+    values(old.id_produto,'estoque','DELETE',old.qtde);
+    end$
+    
+    
+# update produto
+
+create trigger trg_estoque_update
+after update on estoque
+for each row
+begin
+	insert into log(id_item, nome_tabela,operacao,valor_atual, valor_novo)
+    values(old.id_produto,'estoque','UPDATE',old.qtde, new.qtde);
+    end$

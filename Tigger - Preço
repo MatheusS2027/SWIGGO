@@ -1,0 +1,16 @@
+
+DELIMITER $$
+CREATE TRIGGER trg_preco_update
+AFTER UPDATE ON preco
+FOR EACH ROW
+BEGIN
+    IF OLD.pre_custo != NEW.pre_custo THEN
+        INSERT INTO log(id_item, nome_tabela, operacao, valor_atual, valor_novo)
+        VALUES(OLD.id_preco, 'preco', 'UPDATE', OLD.pre_custo, CONCAT('preço de custo alterado para: ', NEW.pre_custo));
+    END IF;
+    IF OLD.pre_venda != NEW.pre_venda THEN
+        INSERT INTO log(id_item, nome_tabela, operacao, valor_atual, valor_novo)
+        VALUES(OLD.id_preco, 'preco', 'UPDATE', OLD.pre_venda, CONCAT('preço de venda alterado para: ', NEW.pre_venda));
+    END IF;
+END$$
+DELIMITER ;

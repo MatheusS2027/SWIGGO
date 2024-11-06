@@ -27,6 +27,13 @@ create trigger trg_preco_update
 after update on preco
 for each row
 begin
+	if old.pre_custo != new.pre_custo then
 	insert into log(id_item, nome_tabela,operacao,valor_atual, valor_novo)
-    values(old.id_preco,'preco','UPDATE',cocnat('preco venda ',old.pre_venda), concat('preco venda ',new.pre_venda));
+    values(old.id_preco,'preco','UPDATE',old.pre_custo, concat('preco custo alaterado para:  ',new.pre_custo));
+	end if;
+    
+    if old.pre_venda != new.pre_venda then
+    insert into log(id_item, nome_tabela,operacao,valor_atual, valor_novo)
+    values(old.id_preco,'preco','UPDATE',old.pre_venda, concat('preco venda alaterado para:  ',new.pre_venda));
+	end if;
     end$
